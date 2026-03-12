@@ -31,7 +31,7 @@ router.post('/signup', (req, res) => {
 	}
 
 	// 3. Vérification existence utilisateur
-	User.findOne({ mail: req.body.mail }).then(user => {
+	User.findOne({ email: req.body.email }).then(user => {
 		if (user === null) {
 			const hash = bcrypt.hashSync(req.body.pwd, 10);
 
