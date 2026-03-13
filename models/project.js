@@ -4,7 +4,8 @@ const projectSchema = mongoose.Schema({
 	name: String,
 	desc: String,
 	language: [String],
-	date: Date,
+	startDate: Date,
+	endDate: Date
 });
 
 const Project = mongoose.model('projects', projectSchema);
