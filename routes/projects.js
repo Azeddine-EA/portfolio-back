@@ -62,4 +62,10 @@ router.post('/create', (req, res) => {
 
 });
 
+router.delete('/delete/:idProject',(req, res)=>{
+	const idProject = req.params.idProject;
+	Project.deleteOne({ _id: idProject }).then(()=>{
+		res.json({result: true, project: 'Deleted !'})
+	})
+})
 module.exports = router;
