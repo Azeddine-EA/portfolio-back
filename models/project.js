@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const projectSchema = mongoose.Schema({
 	name: String,
+	img: String,
 	desc: String,
 	language: [String],
 	startDate: Date,
