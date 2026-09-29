@@ -4,6 +4,7 @@ const projectSchema = mongoose.Schema({
 	name: String,
 	img: String,
 	desc: String,
+	link: String,
 	language: [String],
 	startDate: Date,
 	endDate: Date

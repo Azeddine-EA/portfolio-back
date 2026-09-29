@@ -15,7 +15,7 @@ router.get('/read', function(req, res) {
 
 router.post('/create', (req, res) => {
 	// 1. Vérification des champs
-	if (!checkBody(req.body, ['name','img','desc', 'language', 'startDate','endDate'])) {
+	if (!checkBody(req.body, ['name','img','desc','link', 'language', 'startDate','endDate'])) {
 		res.json({ result: false, error: 'Missing or empty fields' });
 		return;
 	}
@@ -23,7 +23,11 @@ router.post('/create', (req, res) => {
 	Project.findOne({name:req.body.name}).then(project=>{
 		if(project===null){
 
-			const languages = req.body.language.split(',').map(lang => lang.trim()).filter(Boolean);
+	const languages = req.body.language
+  .split(',')
+  .map(lang => lang.trim())
+  .filter(Boolean)
+  .map(lang => lang.toLowerCase());
 
 			// transformer les dates en Date
 		const startDate = new Date(req.body.startDate);
@@ -43,6 +47,7 @@ router.post('/create', (req, res) => {
 				name:req.body.name,
 				img:req.body.img,
 				desc:req.body.desc,
+				link:req.body.link,
 				language:languages,
 				startDate: startDate,
 				endDate: endDate
