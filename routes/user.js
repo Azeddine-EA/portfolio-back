@@ -1,24 +1,16 @@
 var express = require('express');
 var router = express.Router();
-require('../models/connection');
 
-// Routes utilisateur :
-// POST /signup -> crée un utilisateur (mot de passe hashé) + wishlist par défaut, renvoie un token
-// POST /signin -> authentifie l'utilisateur et renvoie son token
+require('../models/connection');
 const { checkBody } = require('../modules/checkBody');
 const User = require('../models/user');
 const uid2 = require('uid2');
 const bcrypt = require('bcrypt');
 
-router.get('/alluser', (req, res) => {
-	// 1. Vérification des champs
-	User.find().then(users=>{
-		res.json({ result: true, users: users });
-	})
-	});
+
 router.post('/signup', (req, res) => {
 	// 1. Vérification des champs
-	if (!checkBody(req.body, ['name', 'email', 'pwd'])) {
+	if (!checkBody(req.body, ['name', 'pwd', 'email'])) {
 		res.json({ result: false, error: 'Missing or empty fields' });
 		return;
 	}
@@ -31,14 +23,14 @@ router.post('/signup', (req, res) => {
 	}
 
 	// 3. Vérification existence utilisateur
-	User.findOne({ email: req.body.email }).then(user => {
-		if (user === null) {
+	User.findOne({ email: req.body.email }).then(data => {
+		if (data === null) {
 			const hash = bcrypt.hashSync(req.body.pwd, 10);
 
 			const newUser = new User({
-				name: req.body.name,
 				email: req.body.email,
-				password: hash,
+				name: req.body.name,
+				pwd: hash,
 				token: uid2(32),
 			});
 
@@ -46,7 +38,6 @@ router.post('/signup', (req, res) => {
 			newUser
 				.save()
 				.then(newDoc => {
-					res.json({ result: true, user: newDoc });
 				})
 				.catch(err => {
 					// Erreur lors de la sauvegarde du user
@@ -54,18 +45,29 @@ router.post('/signup', (req, res) => {
 				});
 		} else {
 			// Utilisateur existe déjà
-			res.json({ result: false, error: 'User already exists' });
+			res.json({ result: false, error: 'Email already exists' });
 		}
 	});
 });
 
+
 router.post('/signin', (req, res) => {
-	if (!checkBody(req.body, ['mail', 'password'])) {
+  // 	console.log('====================');
+	// console.log('SIGNIN APPELÉ');
+	// console.log('BODY :', req.body);
+	// console.log('====================');
+
+	// res.json({
+	// 	result: true,
+	// 	message: 'La route signin fonctionne'
+	// });
+  
+	if (!checkBody(req.body, ['email', 'pwd'])) {
 		return res.json({ result: false, error: 'Missing or empty fields' });
 	}
 
 	User.findOne({ email: req.body.email }).then(user => {
-		if (user && bcrypt.compareSync(req.body.password, user.password)) {
+		if (user && bcrypt.compareSync(req.body.pwd, user.pwd)) {
 			res.json({
 				result: true,
 				token: user.token,

@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var projectsRouter = require('./routes/projects');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/user');
 var contactRouter = require('./routes/contact');
 var technologyRouter = require('./routes/technologies');
 
@@ -24,5 +24,6 @@ app.use('/user', usersRouter);
 app.use('/project', projectsRouter);
 app.use("/contact", contactRouter);
 app.use("/technology", technologyRouter);
+console.log('APP.JS CHARGÉ');
 
 module.exports = app;
