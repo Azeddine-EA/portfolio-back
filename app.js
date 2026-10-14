@@ -15,7 +15,7 @@ var app = express();
 app.use(cors({
   origin: [
     "http://localhost:3001",
-    "https://portfolio-front-azeddine-dev.vercel.app/"
+    "https://portfolio-front-six-sage.vercel.app"
   ]
 }));
 app.use(logger('dev'));
